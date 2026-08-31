@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>这个网站是怎么搭建的 🛠️ · 李华的博客</title>
+  <meta name="description" content="不用任何框架,三个文件 + GitHub Pages,就把个人网站跑了起来。完整过程与踩过的坑。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header class="site-header scrolled">
+    <nav class="nav container" aria-label="主导航">
+      <a class="brand" href="../index.html"><span class="brand-dot"></span>李华<span class="brand-sub">.dev</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html" class="nav-link">首页</a></li>
+        <li><a href="../index.html#about" class="nav-link">关于</a></li>
+        <li><a href="../index.html#projects" class="nav-link">项目</a></li>
+        <li><a href="../index.html#contact" class="nav-link">联系</a></li>
+        <li><a href="../blog.html" class="nav-link nav-blog">✍️ 博客</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色模式">🌙</button>
+        <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <article class="container">
+      <header class="page-head">
+        <p class="eyebrow"><time datetime="2026-08-28">2026 年 8 月 28 日</time></p>
+        <h1>这个网站是怎么搭建的 🛠️</h1>
+        <p class="p-meta">📖 约 5 分钟 · #建站 #前端 #GitHub Pages</p>
+      </header>
+
+      <div class="article">
+        <p class="lead">
+          你现在看到的这个网站,没有用任何框架,也没有数据库和服务器,
+          只有三个文件:<code>index.html</code>、<code>style.css</code>、<code>script.js</code>,
+          托管在 GitHub Pages 上,完全免费。这篇文章记录一下搭建思路。
+        </p>
+
+        <h2>为什么不用框架</h2>
+        <p>React、Vue 当然强大,但对一个以「内容」为主的个人网站来说,它们能带来的收益很有限:</p>
+        <ul>
+          <li>页面基本是静态的,不需要复杂的状态管理;</li>
+          <li>不用构建工具,改完保存刷新就能看到效果,调试成本几乎为零;</li>
+          <li>三个文件就是全部源码,十年后打开依然能跑,不怕依赖升级。</li>
+        </ul>
+        <p>当然,如果以后要写大量文章,我可能会迁移到 Jekyll 或 Hexo 这类静态站点生成器——
+          但那是「内容多到管理不过来」之后的事。</p>
+
+        <h2>深色模式:四个 CSS 变量就够</h2>
+        <p>整站的深浅色切换,核心思路是把所有颜色收进 CSS 变量,再通过 <code>data-theme</code> 属性整体切换:</p>
+        <pre><code>:root {
+  --bg: #f6f8fc;        /* 页面背景 */
+  --surface: #ffffff;   /* 卡片背景 */
+  --text: #101828;      /* 正文颜色 */
+  --border: #e4e9f2;    /* 描边 */
+}
+
+html[data-theme="dark"] {
+  --bg: #0b1020;
+  --surface: #141b31;
+  --text: #e9edf8;
+  --border: #242e4d;
+}</code></pre>
+        <p>切换按钮只需要一行 JS:改一下 <code>data-theme</code>,再把偏好存进 <code>localStorage</code>,
+          下次访问就还是用户选的主题了。</p>
+
+        <h2>部署到 GitHub Pages</h2>
+        <p>部署过程简单到不好意思写教程,但为了完整还是记一下:</p>
+        <ol>
+          <li>在 GitHub 创建一个名为 <code>用户名.github.io</code> 的仓库;</li>
+          <li>把网站文件推上去:</li>
+        </ol>
+        <pre><code>git init
+git add .
+git commit -m "init: 个人网站"
+git remote add origin https://github.com/用户名/用户名.github.io.git
+git push -u origin main</code></pre>
+        <ol start="3">
+          <li>等一两分钟,访问 <code>https://用户名.github.io</code>,网站就上线了 🎉</li>
+        </ol>
+        <p>之后每次 <code>git push</code>,线上都会自动更新。</p>
+
+        <h2>踩过的坑</h2>
+        <ul>
+          <li><strong>锚点被固定导航挡住</strong> —— 给 <code>html</code> 加 <code>scroll-padding-top</code> 即可;</li>
+          <li><strong>滚动浮现动画导致内容闪烁</strong> —— 动画只做位移和透明度,并且用 IntersectionObserver 触发后立即解除监听;</li>
+          <li><strong>字体加载慢</strong> —— 干脆不用 Web 字体,系统字体栈(<code>PingFang SC</code> / <code>Microsoft YaHei</code>)效果就很好,还省了一次网络请求。</li>
+        </ul>
+
+        <h2>写在最后</h2>
+        <p>
+          网站不大,但每一处细节都是自己调出来的,这种「完全拥有」的感觉是托管服务给不了的。
+          下一篇会写写这个博客的写作流程,感兴趣的话可以<a href="2026-08-31-hello-world.html">先看看开篇</a>。
+        </p>
+      </div>
+
+      <nav class="post-nav" aria-label="文章导航">
+        <a href="../blog.html">📝 博客列表</a>
+        <a href="2026-08-31-hello-world.html">下一篇:你好,世界 →</a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> 李华 · 保留所有权利</p>
+      <p>用 ❤️ 搭建 · 灵感持续更新中</p>
+    </div>
+  </footer>
+
+  <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+  <script src="../script.js"></script>
+</body>
+</html>
