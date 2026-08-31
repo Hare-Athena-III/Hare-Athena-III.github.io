@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>李华 · 个人网站</title>
+  <meta name="description" content="李华的个人网站:关于我、我的技能、项目作品和联系方式。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <!-- ================= 顶部导航 ================= -->
+  <header class="site-header" id="siteHeader">
+    <nav class="nav container" aria-label="主导航">
+      <a class="brand" href="#home"><span class="brand-dot"></span>李华<span class="brand-sub">.dev</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="#home" class="nav-link active">首页</a></li>
+        <li><a href="#about" class="nav-link">关于</a></li>
+        <li><a href="#skills" class="nav-link">技能</a></li>
+        <li><a href="#projects" class="nav-link">项目</a></li>
+        <li><a href="#journey" class="nav-link">经历</a></li>
+        <li><a href="#contact" class="nav-link">联系</a></li>
+        <li><a href="blog.html" class="nav-link nav-blog">✍️ 博客</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色模式">🌙</button>
+        <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- ================= 首屏 ================= -->
+    <section class="hero" id="home">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+      </div>
+      <div class="container hero-inner">
+        <p class="hero-hi">👋 你好,我是</p>
+        <h1 class="hero-name">李华</h1>
+        <p class="hero-role">一名热爱创造的 <span id="typed" class="typed">全栈开发者</span><span class="caret" aria-hidden="true"></span></p>
+        <p class="hero-desc">专注于构建优雅、实用的 Web 应用,喜欢把想法变成看得见的产品。</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">看看我的项目</a>
+          <a class="btn btn-ghost" href="#contact">联系我</a>
+        </div>
+        <div class="hero-meta">
+          <span>📍 中国</span>
+          <span>💼 全栈开发</span>
+          <span>🎯 开放合作</span>
+        </div>
+      </div>
+      <a class="scroll-hint" href="#about" aria-label="向下滚动">⌄</a>
+    </section>
+
+    <!-- ================= 关于我 ================= -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">关于我 / About</p>
+          <h2>很高兴认识你</h2>
+        </div>
+        <div class="about-grid">
+          <div class="avatar-wrap reveal" style="--d:1">
+            <div class="avatar"><span>华</span></div>
+            <div class="badge badge-1">💻</div>
+            <div class="badge badge-2">📷</div>
+            <div class="badge badge-3">🏃</div>
+          </div>
+          <div class="about-text reveal" style="--d:2">
+            <p>
+              我是李华,一名充满热情的开发者。我喜欢探索新技术、写代码,也喜欢琢磨设计——
+              相信好的产品既要「能用」,更要「好用、好看」。
+            </p>
+            <p>
+              目前专注于 Web 全栈开发,平时会折腾一些开源小项目和效率工具。
+              工作之外,我喜欢摄影、阅读和跑步,也在坚持写技术博客。
+            </p>
+            <div class="stats">
+              <div class="stat"><strong>3+</strong><span>年编程经验</span></div>
+              <div class="stat"><strong>10+</strong><span>完成项目</span></div>
+              <div class="stat"><strong>∞</strong><span>好奇心</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 技能 ================= -->
+    <section class="section section-alt" id="skills">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">技能 / Skills</p>
+          <h2>我擅长的事情</h2>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card reveal" style="--d:1">
+            <div class="skill-icon">🎨</div>
+            <h3>前端开发</h3>
+            <p>构建响应式、高性能、体验友好的用户界面。</p>
+            <div class="tags">
+              <span class="tag">HTML5</span><span class="tag">CSS3</span>
+              <span class="tag">JavaScript</span><span class="tag">TypeScript</span>
+              <span class="tag">Vue</span><span class="tag">React</span>
+            </div>
+          </div>
+          <div class="skill-card reveal" style="--d:2">
+            <div class="skill-icon">⚙️</div>
+            <h3>后端开发</h3>
+            <p>设计稳定的接口与数据模型,支撑业务可靠运转。</p>
+            <div class="tags">
+              <span class="tag">Node.js</span><span class="tag">Python</span>
+              <span class="tag">MySQL</span><span class="tag">Redis</span>
+              <span class="tag">RESTful API</span>
+            </div>
+          </div>
+          <div class="skill-card reveal" style="--d:3">
+            <div class="skill-icon">🧰</div>
+            <h3>工具与效率</h3>
+            <p>用趁手的工具和自动化,让开发和协作更顺畅。</p>
+            <div class="tags">
+              <span class="tag">Git</span><span class="tag">Linux</span>
+              <span class="tag">Docker</span><span class="tag">Figma</span>
+              <span class="tag">CI/CD</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 项目 ================= -->
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">项目 / Projects</p>
+          <h2>一些我做过的东西</h2>
+        </div>
+        <div class="projects-grid">
+          <article class="project-card reveal" style="--d:1">
+            <div class="cover cover-1"><span class="cover-emoji">🌤️</span></div>
+            <div class="project-body">
+              <h3>天气小站</h3>
+              <p>基于 Vue 3 的天气查询应用,支持城市搜索、定位与未来七天预报,界面简洁优雅。</p>
+              <div class="project-tags"><span>Vue 3</span><span>Vite</span><span>地图 API</span></div>
+              <div class="project-links">
+                <a href="#" class="link-arrow">在线预览 →</a>
+                <a href="#" class="link-arrow">源码 →</a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card reveal" style="--d:2">
+            <div class="cover cover-2"><span class="cover-emoji">📝</span></div>
+            <div class="project-body">
+              <h3>云端笔记</h3>
+              <p>支持 Markdown 编辑、标签管理与多端同步的笔记应用,离线也能顺畅使用。</p>
+              <div class="project-tags"><span>React</span><span>Node.js</span><span>MongoDB</span></div>
+              <div class="project-links">
+                <a href="#" class="link-arrow">在线预览 →</a>
+                <a href="#" class="link-arrow">源码 →</a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card reveal" style="--d:3">
+            <div class="cover cover-3"><span class="cover-emoji">🤖</span></div>
+            <div class="project-body">
+              <h3>智能问答机器人</h3>
+              <p>接入大语言模型 API 的聊天机器人,支持多轮对话与知识库问答,可部署到网页端。</p>
+              <div class="project-tags"><span>Python</span><span>FastAPI</span><span>LLM</span></div>
+              <div class="project-links">
+                <a href="#" class="link-arrow">在线预览 →</a>
+                <a href="#" class="link-arrow">源码 →</a>
+              </div>
+            </div>
+          </article>
+        </div>
+        <p class="more-hint reveal">更多项目整理中,欢迎访问我的 <a href="https://github.com/yourname" target="_blank" rel="noopener">GitHub</a> ✨</p>
+      </div>
+    </section>
+
+    <!-- ================= 最新文章 ================= -->
+    <section class="section section-alt" id="blog">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">博客 / Blog</p>
+          <h2>最近在写什么</h2>
+        </div>
+        <div class="blog-cards">
+          <a class="post-card reveal" style="--d:1" href="posts/2026-08-31-hello-world.html">
+            <time datetime="2026-08-31">2026-08-31</time>
+            <h3>你好,世界 👋</h3>
+            <p>为什么在 2026 年还自己动手写博客,以及这个博客未来会写些什么。</p>
+            <span class="link-arrow">阅读全文 →</span>
+          </a>
+          <a class="post-card reveal" style="--d:2" href="posts/2026-08-28-how-i-built-this-site.html">
+            <time datetime="2026-08-28">2026-08-28</time>
+            <h3>这个网站是怎么搭建的 🛠️</h3>
+            <p>不用任何框架,三个文件 + GitHub Pages,就把个人网站跑了起来。完整过程都在这里。</p>
+            <span class="link-arrow">阅读全文 →</span>
+          </a>
+        </div>
+        <p class="more-hint reveal">📚 更多文章见 <a href="blog.html">博客归档</a></p>
+      </div>
+    </section>
+
+    <!-- ================= 经历 ================= -->
+    <section class="section" id="journey">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">经历 / Journey</p>
+          <h2>我走过的路</h2>
+        </div>
+        <div class="timeline">
+          <div class="t-item reveal" style="--d:1">
+            <p class="t-date">2026 — 至今</p>
+            <h3>自由开发者</h3>
+            <p class="t-desc">独立承接 Web 开发项目,持续维护个人开源项目,写技术博客分享所学。</p>
+          </div>
+          <div class="t-item reveal" style="--d:2">
+            <p class="t-date">2025 — 2026</p>
+            <h3>某互联网公司 · 前端开发实习生</h3>
+            <p class="t-desc">参与公司官网与后台管理系统的开发与性能优化,推动组件库落地。</p>
+          </div>
+          <div class="t-item reveal" style="--d:3">
+            <p class="t-date">2022 — 2026</p>
+            <h3>某大学 · 计算机科学与技术</h3>
+            <p class="t-desc">本科在读,系统学习数据结构、操作系统、计算机网络等课程,多次获得奖学金。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 联系 ================= -->
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="contact-card reveal">
+          <p class="eyebrow">联系我 / Contact</p>
+          <h2>让我们一起做点有意思的事</h2>
+          <p class="contact-text">
+            无论是一个新项目、一次合作,还是只想打个招呼,都欢迎随时联系我 🙂
+          </p>
+          <a class="btn btn-primary btn-lg" href="mailto:hello@example.com">📮 给我发邮件</a>
+          <div class="socials">
+            <a href="https://github.com/yourname" target="_blank" rel="noopener" class="social" aria-label="GitHub" title="GitHub">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>
+            </a>
+            <a href="mailto:hello@example.com" class="social" aria-label="邮箱" title="邮箱">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+            </a>
+            <a href="#" class="social" aria-label="微信" title="微信(请替换为二维码或微信号)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </a>
+            <a href="#" class="social" aria-label="博客" title="博客">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= 页脚 ================= -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> 李华 · 保留所有权利</p>
+      <p>用 ❤️ 搭建 · 灵感持续更新中</p>
+    </div>
+  </footer>
+
+  <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+  <script src="script.js"></script>
+</body>
+</html>

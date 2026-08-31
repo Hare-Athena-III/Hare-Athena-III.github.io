@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- ✍️ 写新文章的步骤:
+       1. 复制本文件,重命名为:日期-英文短标题.html(如 2026-09-15-my-post.html)
+       2. 搜索「①②③」依次修改:标题 / 日期 / 正文
+       3. 在 blog.html 的文章列表里加上这篇文章的链接
+       4. git add . && git commit -m "新文章" && git push
+  -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>① 文章标题 · 李华的博客</title>
+  <meta name="description" content="② 一两句话的文章摘要,会显示在搜索结果里。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header class="site-header scrolled">
+    <nav class="nav container" aria-label="主导航">
+      <a class="brand" href="../index.html"><span class="brand-dot"></span>李华<span class="brand-sub">.dev</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html" class="nav-link">首页</a></li>
+        <li><a href="../index.html#about" class="nav-link">关于</a></li>
+        <li><a href="../index.html#projects" class="nav-link">项目</a></li>
+        <li><a href="../index.html#contact" class="nav-link">联系</a></li>
+        <li><a href="../blog.html" class="nav-link nav-blog">✍️ 博客</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色模式">🌙</button>
+        <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <article class="container">
+      <header class="page-head">
+        <p class="eyebrow"><time datetime="2026-01-01">② 2026 年 1 月 1 日</time></p>
+        <h1>① 文章标题</h1>
+        <p class="p-meta">📖 约 3 分钟 · #标签1 #标签2</p>
+      </header>
+
+      <div class="article">
+        <p class="lead">② 开头导语:用两三句话说明这篇文章讲什么、为什么值得读。</p>
+
+        <h2>第一个小节</h2>
+        <p>正文直接写在 .article 这个 div 里。常用写法:</p>
+        <ul>
+          <li><strong>加粗</strong>、<a href="#">链接</a>、<code>行内代码</code></li>
+          <li>引用块、代码块、分割线的例子见下面</li>
+        </ul>
+
+        <blockquote><p>这是一段引用:别人说的话,或者想强调的句子。</p></blockquote>
+
+        <pre><code>// 代码块:直接贴代码
+console.log("Hello, blog!");</code></pre>
+
+        <h2>第二个小节</h2>
+        <p>更多段落……</p>
+        <hr />
+        <p style="text-align:center">— 完 —</p>
+      </div>
+
+      <nav class="post-nav" aria-label="文章导航">
+        <a href="../blog.html">📝 博客列表</a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> 李华 · 保留所有权利</p>
+      <p>用 ❤️ 搭建 · 灵感持续更新中</p>
+    </div>
+  </footer>
+
+  <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+  <script src="../script.js"></script>
+</body>
+</html>

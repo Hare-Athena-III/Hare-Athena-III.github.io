@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>你好,世界 👋 · 李华的博客</title>
+  <meta name="description" content="为什么在 2026 年还自己动手写博客,以及这个博客未来会写些什么。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header class="site-header scrolled">
+    <nav class="nav container" aria-label="主导航">
+      <a class="brand" href="../index.html"><span class="brand-dot"></span>李华<span class="brand-sub">.dev</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html" class="nav-link">首页</a></li>
+        <li><a href="../index.html#about" class="nav-link">关于</a></li>
+        <li><a href="../index.html#projects" class="nav-link">项目</a></li>
+        <li><a href="../index.html#contact" class="nav-link">联系</a></li>
+        <li><a href="../blog.html" class="nav-link nav-blog">✍️ 博客</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色模式">🌙</button>
+        <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <article class="container">
+      <header class="page-head">
+        <p class="eyebrow"><time datetime="2026-08-31">2026 年 8 月 31 日</time></p>
+        <h1>你好,世界 👋</h1>
+        <p class="p-meta">📖 约 4 分钟 · #随笔 #建站</p>
+      </header>
+
+      <div class="article">
+        <p class="lead">
+          这是这个博客的第一篇文章。在一切开始之前,先回答一个被问过很多次的问题:
+          都 2026 年了,社交平台这么发达,为什么还要自己搭一个博客?
+        </p>
+
+        <h2>为什么要写博客</h2>
+        <p>
+          社交平台上的内容是「流」——发出去,被刷过,就沉下去了。而博客更像一座「小花园」:
+          每篇文章都种在那里,可以被搜索、被引用,两年后翻回来还能继续浇灌。
+        </p>
+        <p>更重要的是,写作本身就是思考。很多时候我以为自己懂了,直到开始下笔才发现逻辑里全是窟窿。
+          把一件事写清楚,是检验是否真正理解的最好方式。</p>
+
+        <blockquote>
+          <p>「Writing is thinking. 如果写不清楚,说明还没想清楚。」</p>
+        </blockquote>
+
+        <h2>这里会写些什么</h2>
+        <ul>
+          <li><strong>学习笔记</strong> —— 新技术、新工具的入门记录与踩坑总结;</li>
+          <li><strong>项目复盘</strong> —— 做过的项目,哪些决策是对的,哪些想重来;</li>
+          <li><strong>生活随笔</strong> —— 读书、摄影、跑步,以及一些无用的思考。</li>
+        </ul>
+
+        <h2>如何发布一篇文章</h2>
+        <p>这个博客没有任何后台,写文章就是往 <code>posts/</code> 目录里加一个 HTML 文件,步骤一共四步:</p>
+        <ol>
+          <li>复制 <code>posts/template.html</code>,把文件名改成 <code>日期-英文标题.html</code>,例如
+            <code>2026-09-15-my-new-post.html</code>;</li>
+          <li>打开文件,修改 <code>&lt;title&gt;</code>、大标题和正文(模板里有注释标好了位置);</li>
+          <li>在 <code>blog.html</code> 的文章列表里加一条链接;</li>
+          <li>提交并推送,一分钟后线上就能看到:</li>
+        </ol>
+        <pre><code>git add .
+git commit -m "发布新文章:我的新文章"
+git push</code></pre>
+
+        <h2>最后</h2>
+        <p>
+          不给自己定「周更」之类的 flag,只希望这里能一直有「写完之后觉得没白写」的文章。
+          如果某篇文章恰好帮到了你,欢迎通过首页的联系方式告诉我,那会让我很高兴 🙂
+        </p>
+        <hr />
+        <p style="text-align:center">— 完 —</p>
+      </div>
+
+      <nav class="post-nav" aria-label="文章导航">
+        <a href="2026-08-28-how-i-built-this-site.html">← 上一篇:这个网站是怎么搭建的</a>
+        <a href="../blog.html">📝 博客列表</a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> 李华 · 保留所有权利</p>
+      <p>用 ❤️ 搭建 · 灵感持续更新中</p>
+    </div>
+  </footer>
+
+  <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+  <script src="../script.js"></script>
+</body>
+</html>
