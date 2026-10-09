@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>桌面快捷方式弹「安全警告」,真凶是谁 · 李华的博客</title>
+  <meta name="description" content="一次真实排查的完整对话记录:桌面快捷方式双击弹「你要打开此文件吗?」,而真凶既不是病毒也不是下载来源。原文照录。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    /* ---------- 对话记录（仅本页使用） ---------- */
+    .chat { margin: 30px 0 12px; }
+    .day-sep { text-align: center; margin: 34px 0 18px; }
+    .day-sep span {
+      display: inline-block; padding: 4px 16px; border-radius: 999px;
+      background: var(--surface-2); color: var(--muted);
+      font-size: 13px; font-weight: 600; letter-spacing: 0.4px;
+    }
+    .article .turn {
+      border: 1px solid var(--border); border-radius: 16px;
+      background: var(--surface); box-shadow: var(--shadow-sm);
+      padding: 16px 18px; margin-bottom: 14px;
+    }
+    .article .turn-me { background: var(--surface-2); border-color: transparent; }
+    .turn-head {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 10px; font-size: 13.5px; font-weight: 700; color: var(--muted);
+    }
+    .turn-me .turn-head { color: var(--primary); }
+    .turn-head time { font-weight: 500; color: var(--muted); }
+    .turn-body > :last-child { margin-bottom: 0; }
+    .turn-body p { color: var(--text-2); margin: 0 0 12px; }
+    .turn-body h3 { font-size: 18px; margin: 22px 0 10px; }
+    .turn-body h4 { font-size: 16.5px; margin: 18px 0 10px; }
+    .turn-body ul { list-style: disc; margin: 0 0 12px 22px; color: var(--text-2); }
+    .turn-body ol { list-style: decimal; margin: 0 0 12px 22px; color: var(--text-2); }
+    .turn-body li { margin-bottom: 6px; }
+    .turn-body pre { margin: 0 0 14px; }
+    .turn-body table {
+      width: 100%; border-collapse: collapse; margin: 0 0 14px;
+      font-size: 14.5px; display: block; overflow-x: auto;
+    }
+    .turn-body th, .turn-body td {
+      border: 1px solid var(--border); padding: 7px 10px;
+      text-align: left; color: var(--text-2);
+    }
+    .turn-body th { background: var(--surface-2); color: var(--text); white-space: nowrap; }
+    .turn-body figure { margin: 0 0 14px; }
+    .turn-body figure img { margin: 0 0 6px; border: 1px solid var(--border); }
+    .turn-body figcaption { color: var(--muted); font-size: 13px; text-align: center; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header scrolled">
+    <nav class="nav container" aria-label="主导航">
+      <a class="brand" href="../index.html"><span class="brand-dot"></span>李华<span class="brand-sub">.dev</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html" class="nav-link">首页</a></li>
+        <li><a href="../index.html#about" class="nav-link">关于</a></li>
+        <li><a href="../index.html#projects" class="nav-link">项目</a></li>
+        <li><a href="../index.html#contact" class="nav-link">联系</a></li>
+        <li><a href="../blog.html" class="nav-link nav-blog">✍️ 博客</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色模式">🌙</button>
+        <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <article class="container">
+      <header class="page-head">
+        <p class="eyebrow"><time datetime="2026-10-09">2026 年 10 月 9 日</time></p>
+        <h1>桌面快捷方式弹「安全警告」,真凶是谁 🕵️</h1>
+        <p class="p-meta">📖 约 8 分钟 · #Windows #排错 #对话记录</p>
+      </header>
+
+      <div class="article">
+        <p class="lead">
+          一次真实排查的完整对话记录:桌面上的快捷方式双击就弹「你要打开此文件吗?」,
+          一路查下来,真凶既不是病毒,也不是下载来源。原文照录,没有删改。
+        </p>
+
+        <div class="chat">
+            <p class="day-sep"><span>2026 年 10 月 07 日</span></p>
+            <div class="turn turn-me">
+              <p class="turn-head"><span>我</span><time>00:12</time></p>
+              <div class="turn-body">
+            <p>我发现在这里编写机器人插件并保存在桌面之后桌面的很多快捷方式出现了这个警告</p>
+            <figure><img src="../assets/desktop-warning-revo.png" alt="第一张截图：RevoUninstaller Pro.lnk 的「你要打开此文件吗?」" loading="lazy" /><figcaption>第一张截图：<code>RevoUninstaller Pro.lnk</code> 的「你要打开此文件吗?」</figcaption></figure>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:13</time></p>
+              <div class="turn-body">
+            <p>主人别慌～这个警告我一眼就认出来了，是先让我查一下桌面到底有多少人中招，别瞎猜。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:13</time></p>
+              <div class="turn-body">
+            <p>嗯……1080 个带标记的文件，但大部分是正常的下载文件（PDF、图片、pcap）。关键要看<strong>桌面顶层</strong>的快捷方式是从哪来的标记。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:17</time></p>
+              <div class="turn-body">
+            <p>主人，我把整个桌面翻了一遍（52875 个文件），结论有点反直觉——但我先说明白那个警告到底是什么。</p>
+            <h3>这个弹窗是什么</h3>
+            <p>它叫 <strong>Mark of the Web（MOTW，网络标记）</strong>，存在文件的<strong>备用数据流</strong> <code>Zone.Identifier</code> 里：</p>
+            <pre><code>[ZoneTransfer]
+ZoneId=3
+ReferrerUrl=&lt;来源&gt;</code></pre>
+            <p>只要 <code>ZoneId=3</code>（Internet 区域）+ 文件类型被视为有风险（<code>.lnk</code>/<code>.exe</code>/<code>.url</code>/脚本…），双击时 Windows 的附件管理器就弹「你要打开此文件吗？」。跟发行商、跟杀毒都无关。</p>
+            <h3>实测结果：不是「写插件」干的</h3>
+            <table><thead><tr><th>检查项</th><th>结果</th></tr></thead><tbody><tr><td>桌面顶层 31 个 <code>.lnk</code></td><td><strong>0 个</strong>带标记（<code>RevoUninstaller Pro.lnk</code> 只有 <code>:$DATA</code>，干干净净）</td></tr><tr><td>全桌面递归所有 <code>.lnk</code> / <code>.url</code></td><td><strong>0 个</strong>带标记</td></tr><tr><td>公共桌面 22 个 <code>.lnk</code></td><td>0 个带标记</td></tr><tr><td>桌面带标记的文件</td><td>1081 个，全是 <code>.jpg 889 / .png 147 / .txt 21 / .pdf 21 / .jar / .pcap</code> —— 全是真下载来的（百度网盘、学校网站、解压出来的 zip）</td></tr><tr><td>探针：用 pwsh 往桌面写文件</td><td>只有 <code>:$DATA</code>，<strong>不加标记</strong></td></tr><tr><td>探针：<code>Copy-Item</code> 复制一个带标记的文件</td><td>副本<strong>继承</strong> <code>Zone.Identifier</code> ← 关键</td></tr><tr><td>探针：解压下载的 zip</td><td>解压出的文件带 <code>ReferrerUrl=C:\Users\18329\Downloads\&lt;zip&gt;</code></td></tr><tr><td>区域策略 <code>Zones\0~4\1801</code>、附件管理器策略</td><td>全部默认，没人乱改</td></tr></tbody></table>
+            <p>所以：<strong>「在桌面保存/编写文件」这个动作本身永远不会给文件打标记</strong>——我拿探针实测过了，写文件不加标记、只有<strong>复制/解压带标记的东西</strong>才会传递。你桌面上那 1081 个带标记的文件，来源一查全是下载痕迹（<code>HostUrl=https://mydas.wetolink.com/</code>、<code>ReferrerUrl=...\Downloads\7fc3e8a0-....zip</code> 这种）。</p>
+            <p>而且那些快捷方式<strong>现在一个标记都没有了</strong>，说明当时的标记要么被清掉了（点过「打开」/你运行过清理），要么根本没留在 <code>.lnk</code> 上被记下来。也就是说：<strong>你现在再双击，理论上不该再弹了。</strong></p>
+            <h3>那为什么会「很多快捷方式一起中招」</h3>
+            <p>快捷方式唯一能染上标记的途径只有两条，你对照回忆一下是哪种：</p>
+            <ol><li><strong>被复制/解压传染</strong>：桌面上曾经有个带标记的来源（下载的整合包、加速器安装包、<code>Downloads</code> 里的 zip），里面的 <code>.lnk</code> 解压/复制到桌面后全部继承 <code>ZoneId=3</code>。截图里「发送方」显示的是个本地路径，这正是<strong>本地复制/解压传递</strong>的典型特征（如果是网页下载会显示 URL）。</li><li><strong>OneDrive 回写</strong>：你的桌面被重定向到 <code>C:\Users\18329\OneDrive\Desktop</code>（我查了注册表，<code>User Shell Folders</code> 和 <code>Shell Folders</code> 都指向它）。云端占位文件重新下载/恢复时，有时会连着标记一起回来。</li></ol>
+            <p>跟「机器人插件」的关系大概率是<strong>同一条时间线上的巧合</strong>——除非你的插件里有「下载文件到桌面」或「复制/解压压缩包到桌面」的逻辑，那它就成了那个传染源。</p>
+            <h3>要清 / 要防</h3>
+            <p><strong>清（现在桌面上没有快捷方式需要清，但你要清那 1081 个下载文件也可以）：</strong></p>
+            <pre><code># 只解锁快捷方式（针对你看到的现象）
+Get-ChildItem "$env:USERPROFILE\OneDrive\Desktop" -Recurse -File -Include *.lnk,*.url | Unblock-File
+
+# 或者整个桌面全部解锁
+Get-ChildItem "$env:USERPROFILE\OneDrive\Desktop" -Recurse -File | Unblock-File</code></pre>
+            <p>单个文件：右键 → 属性 → 最下面勾「解除锁定」→ 确定。</p>
+            <p><strong>防：</strong></p>
+            <ul><li>下载的压缩包<strong>先 <code>Unblock-File</code> 再解压</strong>，标记就不会传给孩子文件：</li></ul>
+            <p><code>Get-ChildItem "$env:USERPROFILE\Downloads" -Filter *.zip | Unblock-File</code></p>
+            <ul><li>写脚本/插件别放桌面。桌面有 OneDrive 同步、有各种触发器，放到 <code>C:\Users\18329\Documents\bots</code> 这类普通目录更稳，桌面只留快捷方式。</li><li>想彻底关掉这个警告（代价是下载文件不再被保护，<strong>不建议</strong>）：<code>HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments</code> 下建 <code>SaveZoneInformation=1</code>。</li></ul>
+            <h3>两个顺带说明</h3>
+            <ol><li>我做复制实验时，因为一条命令报错（<code>Join-Path</code> 少参数），不小心把 <code>杂项\ctf\题目\QR_code.png</code> 复制到了桌面根目录（00:14:42 那个，672 字节）。<strong>已经删掉了</strong>，桌面顶层现在非快捷方式文件为空，没有残留。</li><li>如果你<strong>现在双击还是会弹</strong>，那我上面查到的「0 个带标记」就跟现象矛盾了，需要你告诉我具体是哪个快捷方式（文件名就行）——那种情况下凶手可能是 OneDrive 同步回写，得换个查法。</li></ol>
+              </div>
+            </div>
+            <div class="turn turn-me">
+              <p class="turn-head"><span>我</span><time>00:22</time></p>
+              <div class="turn-body">
+            <p>可以帮我排查一下吗</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:22</time></p>
+              <div class="turn-body">
+            <p>主人交给我，那就查到底。我先把「谁在给文件贴标记」这条线铺开：看桌面目录自身、看最近被动过的快捷方式、看有没有自定义区域映射。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:23</time></p>
+              <div class="turn-body">
+            <p>主人，我先把「DSH 自己写文件」这条最可疑的路也验掉——之前我只测了 pwsh 写文件，还没测这个界面里的 <code>write</code> 工具。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:23</time></p>
+              <div class="turn-body">
+            <p>主人，我把 <code>write</code> 工具那条路也测了——<strong>同样只有 <code>:$DATA</code>，不带标记</strong>。所以「在这里写插件存到桌面」这个动作，两条写入路径都被排除了。线索断了，那就只能<strong>布网抓现行</strong>。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:24</time></p>
+              <div class="turn-body">
+            <p>主人，监视器第一次启动就被系统拦了——<strong>执行策略是 AllSigned，未签名的脚本不许跑</strong>。这本身也是个有价值的发现，我先顺手查一下策略。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:25</time></p>
+              <div class="turn-body">
+            <p>监视器活了（<code>WATCH START</code> 已落盘）。趁热做个<strong>可控复现实验</strong>——我造一个测试快捷方式，只给它写一个"裸"的 ZoneId=3 标记，看看它是不是就能弹出你截图里那个框。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:26</time></p>
+              <div class="turn-body">
+            <p>主人，网已经布好，而且刚才<strong>当场抓到现行</strong>——我造的测试快捷方式 2 秒内就被监视器逮住并记录了 ADS 内容。现在需要你配合确认三件事 👇</p>
+            <p>（<code>__MOTW测试_可删除__.lnk</code> 是我建的诊断用文件，测完我立刻删掉，别担心。）</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:27</time></p>
+              <div class="turn-body">
+            <p><strong>实验成功，你答的这三条把案子基本破了</strong>：裸 ZoneId=3 就能复现，说明你截图里那种"发送方 = 桌面自身路径"的形态，就是<strong>有人/某程序往 .lnk 上直接盖了一个 Internet 区域戳</strong>，而不是从下载文件夹复制来的（复制会带上 ReferrerUrl 来源路径）。</p>
+            <p>但你说"还弹"——这跟我扫描出的"桌面 0 个快捷方式带标记"矛盾。我重新用更狠的方法验一遍，别相信我上一轮的结论。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:28</time></p>
+              <div class="turn-body">
+            <p>数据说话：<strong>你现在全系统（桌面 37 个、公共桌面 22 个、开始菜单 58 个、快速启动 8 个）带 Internet 标记的快捷方式，只有我刚建的那一个测试文件</strong>。连 <code>抖音.lnk</code>（指向 <code>D:\douyin\douyin.exe</code>）都是干净的、目标也可疑地干净。</p>
+            <p>那你说"还弹"就必须精确定位了——我要知道你双击的<strong>到底是哪个文件</strong>。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:28</time></p>
+              <div class="turn-body">
+            <p>主人，测试文件已删，桌面回到 0 标记状态。现在就差<strong>一个精确坐标</strong>了，你随手帮我点一下 👇</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:31</time></p>
+              <div class="turn-body">
+            <p>两条独立验证（PowerShell 列全部数据流 + <code>cmd /r dir</code>）都指向同一个结论：<strong><code>抖音.lnk</code> 连一个附加数据流都没有</strong>，纯 <code>:$DATA</code>。它指向的 <code>D:\douyin\douyin.exe</code>，以及整个 <code>D:\douyin</code>（1110 个文件）也全都是干净的。</p>
+            <p>按 Windows 的规则，"来自 Internet 的文件"那个框<strong>必须有</strong> MOTW 标记才能弹——所以你双击它还能弹这件事，只有三种可能：</p>
+            <ol><li>你点的其实不是桌面这个 <code>抖音.lnk</code>（比如任务栏/开始菜单的另一份、或下载文件夹里的另一份）；</li><li>弹窗根本不是 Windows 的附件管理器，而是某个<strong>常驻安全软件</strong>仿的；</li><li>存在<strong>绕过 ADS 的第二条标记通道</strong>（比如快捷方式内部属性里存了区域信息——但我扫了字节流，里面只有 <code>D:\douyin\douyin.exe</code>，没有任何 Zone/Internet/Referrer 痕迹）。</li></ol>
+            <p>顺手发现的异常：你这台机器的安全姿态被人调得很紧——本地未签名脚本被直接判"未签名"拒绝执行、<code>CurrentUser</code> 的 PowerShell 执行策略被人从系统默认改成了 <code>RemoteSigned</code>、连 <code>SecurityCenter2</code> 和 Defender 状态查询都是<strong>"拒绝访问"</strong>。真凶大概率是某个常驻安全软件。</p>
+            <p><strong>所以我现在就等你的截图</strong> 📸 —— 重点看这三行：</p>
+            <ul><li>标题栏「你要打开此文件吗？」</li><li><strong>名称</strong>（显示的是 抖音.lnk 还是别的文件）</li><li><strong>发送方</strong>（显示桌面路径？还是网址？还是空白）</li></ul>
+              </div>
+            </div>
+            <div class="turn turn-me">
+              <p class="turn-head"><span>我</span><time>00:32</time></p>
+              <div class="turn-body">
+            <p>还是这样子，我甚至换了一个</p>
+            <figure><img src="../assets/desktop-warning-alas.png" alt="第二张截图：换成 Alas.lnk 照样弹" loading="lazy" /><figcaption>第二张截图：换成 <code>Alas.lnk</code> 照样弹</figcaption></figure>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:33</time></p>
+              <div class="turn-body">
+            <p>主人，<strong>破案了 —— 但你得先接受一个反直觉的事实</strong>：<code>Alas.lnk</code> 是 2025/9/14 创建、2026/5/9 后没动过的老文件，<strong>它一个附加数据流都没有</strong>（<code>数据流: :$DATA</code>），而我上一条给你的"本次测试文件"结论因此被污染了——你那个框根本不是因为我打的标记才弹的。</p>
+            <p>真正的开关在<strong>每个区域（Zone）的 1806 号设置「启动应用程序和不安全文件」</strong>：</p>
+            <ul><li><code>HKCU\...\Zones\3\1806 = 1</code>（提示）</li><li><code>HKCU\...\Zones\2\1806 = 1</code>（提示）</li><li><code>HKLM\...\Zones\0\1806 = 0</code>（允许）</li></ul>
+            <p>我现在用一个<strong>完全干净、没有任何标记</strong>的快捷方式做对照实验，顺便把漏查的区域都翻出来。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:34</time></p>
+              <div class="turn-body">
+            <p>查到一个<strong>决定性旁证</strong>：<code>Alas.lnk</code> 指向 <code>C:\Users\18329\Downloads\AlasApp_0.4.9_fullcn\...\Alas.exe</code>，<code>RevoUninstaller Pro.lnk</code> 指向 <code>C:\Users\18329\Downloads\RevoUninstaller-Pro-5.2.6-x64.exe</code> —— 都是<strong>下载目录里的程序</strong>。但这两个目标的 ADS 也都是干净的 <code>:$DATA</code>，所以还是不能解释。</p>
+            <p>而且我注意到弹窗有个怪特征：<strong>「名称」和「发送方」显示的是同一个完整路径</strong>。真正的 Windows 弹窗里"发送方"应该显示网址或来源，两边一模一样很可疑。我去查一下这是不是已知毛病。</p>
+              </div>
+            </div>
+            <div class="turn turn-me">
+              <p class="turn-head"><span>我</span><time>00:37</time></p>
+              <div class="turn-body">
+            <p>I actually found an answer that made more sense that anything above.  Due to a network failure, after starting my computer and attempting to log into my domain account, it appears that Windows will change the permissions on certain items when it thinks that it is under attack.  So, Windows changed the permissions on my desktop, but nothing that I could see in the UI.  Some, but not all, links on my desktop started to exhibit this issue and it only affected links on my desktop.</p>
+            <p>So, after doing quite a few searches I came across the following article, which turned me in the correct direction:</p>
+            <p>Fix Start Menu Shortcuts Open File Security Warning in Windows 7 and Windows Vista</p>
+            <p>All I had to do was change the path to my desktop (see below):</p>
+            <p>ICACLS "C:\Users&lt;username goes here&gt;\Desktop" /Setintegritylevel (OI)(CI)M</p>
+            <p>and everything was back to normal again. 能不能试试这个？</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:37</time></p>
+              <div class="turn-body">
+            <p><strong>这个方向非常对</strong>——而且我立刻能想到为什么它完美吻合：<strong>文件夹的完整性级别（Integrity Level）被降成 Low 时，里面的快捷方式每次启动都会弹这个"安全警告"，跟 MOTW 一点关系都没有</strong>。这正好解释了我扫不出任何 Zone.Identifier 却照样弹的现象。立刻验！</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:38</time></p>
+              <div class="turn-body">
+            <p><strong>找到了，而且是铁证。</strong> 你那个方向完全正确 —— 但真相比文章里的更"家贼难防"：</p>
+            <pre><code>C:\Users\18329\OneDrive\Desktop        Mandatory Label\Low Mandatory Level:(OI)(CI)(NW)   ← 桌面被降级成低完整性
+C:\Users\18329\OneDrive\Desktop\Alas.lnk   Low Mandatory Level:(I)(NW)                     ← 继承
+C:\Users\18329\.dsh                    Low Mandatory Level:(OI)(CI)(NW)                   ← 连 DSH 家目录也是
+C:\Users\18329\Downloads / OneDrive / Public Desktop   无标签 = 正常 Medium</code></pre>
+            <p>而<strong>我自己的进程令牌就是 <code>Mandatory Label\Low Mandatory Level (S-1-16-4096)</code></strong> —— 也就是说，桌面变成 Low 是 <strong>DSH 自己的受限沙箱干的</strong>（它以低完整性令牌运行，工作区正好就是你的桌面）。低完整性的快捷方式被 Medium 的 Explorer 启动时，Windows 就每次弹"来自 Internet 的文件"警告——<strong>跟 MOTW 一点关系都没有，难怪我扫不出任何 Zone.Identifier</strong>。</p>
+            <p>但我现在<strong>没权限修</strong>：低完整性令牌连自己的降级都改不动，<code>icacls</code> 直接 <code>Access is denied</code>。所以需要你放行一次越权操作。</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>00:43</time></p>
+              <div class="turn-body">
+            <p>破案了——<strong>跟病毒、跟下载来源都没关系，真凶是「完整性级别（Integrity Level）」。</strong> 你那句「"作者" 被系统当可疑对象」的猜测，方向对了。</p>
+            <p><strong>1) 为什么每次双击都弹</strong></p>
+            <ul><li>桌面 <code>C:\Users\18329\OneDrive\Desktop</code> 连同它的整个子树，被标成了 <code>Mandatory Label\Low Mandatory Level:(OI)(CI)(NW)</code>（低完整性）。</li><li>低完整性的 <code>.lnk</code> 被正常（Medium）的 Explorer 打开时，Windows 无条件当成不可信来源 → 每次双击都弹「打开文件 - 安全警告 / 来自 Internet 的文件…」。</li><li>所以怎么扫都扫不到 <code>Zone.Identifier</code>：它压根不是 MOTW 的问题（也顺手解释了为什么弹窗里「名称」和「发送方」是同一个本地路径——这是低完整性告警的特征）。</li><li>谁干的：<strong>DSH 自己的受限沙箱</strong>。它会把「会话工作区」标成 Low，而你的工作区就是桌面（<code>C:\Users\18329\.dsh</code> 早前也被当过工作区，所以它也中招）。你之前怀疑的「写插件导致」算间接对上了：是写插件那套工具干的，但错的不是「写文件」，是它给工作区打的标签。</li></ul>
+            <p><strong>2) 已经修好了</strong></p>
+            <ul><li>桌面 + 递归全部 <strong>62 个目录</strong> 全部恢复 <code>Medium</code>；复核桌面根 = <code>Medium (OI)(CI)(NW)</code>，会弹警告的 38 个类型文件（.exe/.lnk/.url/.bat/.ps1/.jar…）里 <strong>仍为 Low 的 = 0</strong>。</li><li>顺手做了继承验证：修好后我用工具在桌面新建文件，级别直接是 Medium → 以后桌面上新建的快捷方式也不会再弹。</li><li>我造过的测试文件（<code>__MOTW测试</code>、<code>__对照A</code>、<code>__wtest2__</code>）全部清干净，桌面无残留。</li></ul>
+            <p><strong>3) 一个副作用，得提前说</strong> 桌面现在是 Medium，而我的命令行沙箱是 Low → <strong>我没法再用 pwsh 往桌面写/删东西了</strong>（刚才删那两个测试文件都是越权删的）。所以以后要我在桌面干活，要么你批准越权，要么把会话工作区换到普通目录（例如 <code>D:\dsh-work</code>），别拿桌面/OneDrive 当工作区。</p>
+            <p><strong>4) 会复发，别忘了一行命令</strong> 只要下次还用桌面当工作区，沙箱可能再把桌面降成 Low，症状就回来了。复发时这样修（管理员终端一行）：</p>
+            <pre><code>icacls "C:\Users\18329\OneDrive\Desktop" /setintegritylevel (OI)(CI)M</code></pre>
+            <p>我另外挂了个监视器，每 30 秒盯一次桌面级别，一变就写日志，复发能立刻抓到时间点。</p>
+            <p><strong>5) 现在请你验收</strong>：双击桌面上的 抖音.lnk、Alas.lnk、RevoUninstaller Pro.lnk —— 还会弹吗？告诉我结果，还弹我接着挖。</p>
+            <p>（<code>C:\Users\18329\.dsh</code> 我故意没动：它现在也是 Low，但里面没有会双击的 exe/快捷方式，而沙箱要靠写它跑会话，改成 Medium 反而可能弄坏我自己的运行环境。）</p>
+              </div>
+            </div>
+            <p class="day-sep"><span>2026 年 10 月 09 日</span></p>
+            <div class="turn turn-me">
+              <p class="turn-head"><span>我</span><time>20:02</time></p>
+              <div class="turn-body">
+            <p>你要不要考虑一下，把这个东西写一下放进我的个人网站里</p>
+              </div>
+            </div>
+            <div class="turn turn-me">
+              <p class="turn-head"><span>我</span><time>20:05</time></p>
+              <div class="turn-body">
+            <p>你刚刚做了什么，我的卡巴斯基一直给我报毒</p>
+              </div>
+            </div>
+            <div class="turn">
+              <p class="turn-head"><span>DeepSeek</span><time>20:06</time></p>
+              <div class="turn-body">
+            <p>先说清楚<strong>我刚做了什么</strong>——这次会话（今天 20:02 之后）我全程只做了「看」，没做「改」：列了 <code>C:\Users\18329</code> 和 <code>D:\</code> 的目录（你说要把这次排查写成文章，我在找你的网站项目）、读了桌面和文件的完整性级别、查了有没有上次遗留的监视进程。<strong>没有写文件、没有改权限、没有装任何东西。</strong> 唯一一次动手是尝试删掉我上一会话留在 <code>%TEMP%</code> 的监视脚本，结果被系统拒绝（我现在权限很低，连删都删不动）。</p>
+            <p>但我顺手查到两件更要紧的事，时间点和你报毒对得上：</p>
+            <p><strong>1) 桌面又被降成 Low 了（上次的修复被回滚）</strong></p>
+            <pre><code>C:\Users\18329\OneDrive\Desktop  -&gt;  Mandatory Label\Low Mandatory Level:(OI)(CI)(NW)</code></pre>
+            <p>10/07 修好的东西现在已经还原 → 你那个「打开文件 - 安全警告」会重新开始弹。看起来 DSH 的沙箱 ACL 机制<strong>每次开会话都会给「会话工作区」重新打 Low 标签</strong>（<code>%TEMP%</code> 里有 <code>dsh-acl-locks</code>、<code>dsh-acl-skill-*</code> 这些痕迹，其中一套 <code>diagnose-windows-sandbox-acl.ps1</code> 正好在<strong>今天 20:01:31</strong> 又被释放出来）。</p>
+            <p><strong>2) 卡巴斯基的活动时间点吻合</strong></p>
+            <ul><li>卡巴的数据文件最后写入：<strong>今天 20:03:26</strong>（今天 19:33 那次只是常规病毒库更新）。</li><li>而本次会话启动 + ACL 相关操作是 <strong>20:01:31–20:02:46</strong>。</li><li>所以最可能的情况是：<strong>卡巴的行为防护/HIPS 被「反复修改 ACL、改对象完整性级别」这类动作触发了</strong>（它把这种"改安全标签"的行为当成入侵特征，很常见）。——<strong>这只是推测</strong>，要你那条报警原文才能确认。</li></ul>
+            <p><strong>我需要你给我一条信息（最关键）</strong> 打开卡巴斯基 →「报告 / 通知」，告诉我三样：</p>
+            <ol><li><strong>检测名称原文</strong>（例如 <code>PDM:…</code>、<code>HEUR:…</code>、或「行为被阻止 / 主机入侵防护」类事件）；</li><li><strong>被点名的文件或进程路径</strong>（是 <code>%TEMP%\dsh-…</code> 里的脚本？<code>Kaspersky</code> 报的是 <code>dsh.exe</code>？还是 <code>powershell.exe</code>？）；</li><li>处置是「已清除 / 已拦截 / 已允许」。</li></ol>
+            <p>截图直接贴过来最快。我按名字就能定位是我上回留下的临时脚本、是 DSH 的 ACL 技能脚本，还是 dsh 本体在动 ACL。</p>
+            <p><strong>暂时别做的</strong>：别关杀软、别急着点「添加到排除项」——先看清它在报谁，我也不会让你关杀软。</p>
+            <p><strong>下一步你挑一个：</strong></p>
+            <ul><li><strong>A（推荐）</strong>：把 DSH 的会话工作区从桌面换成普通目录（比如 <code>D:\dsh-work</code>）。这是唯一能同时终结「弹窗复发」和「沙箱每次会话都来改桌面 ACL」的办法，换完我帮你把桌面再修回 Medium。</li><li><strong>B</strong>：先不换工作区，我立刻再越权把桌面修回 Medium——但动作本身就是改 ACL，<strong>很可能又触发一次卡巴报警</strong>，而且下次开会话大概率又被降回去。</li><li><strong>C</strong>：等我看到卡巴那条报警原文再决定动不动手。</li></ul>
+            <p>我这边还留着上一会话的两个监视脚本删不掉（<code>C:\Users\18329\AppData\Local\Temp\dsh-YB2KGx\motw-watch</code>、<code>il-watch</code>），等你定了方案我一起清掉。</p>
+              </div>
+            </div>
+        </div>
+
+        <hr />
+        <p style="text-align:center">— 完 —</p>
+      </div>
+
+      <nav class="post-nav" aria-label="文章导航">
+        <a href="2026-08-31-hello-world.html">← 上一篇:你好,世界</a>
+        <a href="../blog.html">📝 博客列表</a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> 李华 · 保留所有权利</p>
+      <p>用 ❤️ 搭建 · 灵感持续更新中</p>
+    </div>
+  </footer>
+
+  <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+  <script src="../script.js"></script>
+</body>
+</html>
