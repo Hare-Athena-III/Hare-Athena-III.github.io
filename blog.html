@@ -4,72 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>博客 · HARE</title>
-  <meta name="description" content="HARE 的博客:学习笔记、项目复盘与生活随笔。" />
+  <link rel="canonical" href="https://hare-athena-iii.github.io/" />
+  <meta name="robots" content="noindex" />
+  <meta http-equiv="refresh" content="0; url=index.html" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <a class="skip-link" href="#main">跳到主要内容</a>
-
-  <header class="site-header scrolled">
-    <nav class="nav container" aria-label="主导航">
-      <a class="brand" href="index.html"><span class="brand-dot"></span>HARE<span class="brand-sub">.dev</span></a>
-      <ul class="nav-menu" id="navMenu">
-        <li><a href="index.html" class="nav-link">首页</a></li>
-        <li><a href="index.html#about" class="nav-link">关于</a></li>
-        <li><a href="index.html#projects" class="nav-link">项目</a></li>
-        <li><a href="index.html#contact" class="nav-link">联系</a></li>
-        <li><a href="blog.html" class="nav-link nav-blog">✍️ 博客</a></li>
-      </ul>
-      <div class="nav-actions">
-        <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色模式">🌙</button>
-        <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </nav>
-  </header>
-
   <main id="main">
-    <div class="container">
-      <header class="page-head">
-        <p class="eyebrow">博客 / Blog</p>
-        <h1>记录与思考 ✍️</h1>
-        <p class="p-meta">这里存放我的学习笔记、项目复盘和一些生活随笔,目前共 3 篇。</p>
-      </header>
-
-      <div class="blog-wrap">
-        <a class="post-list-item" href="posts/2026-10-09-shortcut-security-warning.html">
-          <time class="post-item-date" datetime="2026-10-09">2026-10-09</time>
-          <h2>桌面快捷方式弹「安全警告」,真凶是谁 🕵️</h2>
-          <p class="post-item-excerpt">一次真实排查的完整对话:从「以为是病毒」一路查到权限里的完整性级别。原文照录。</p>
-          <span class="link-arrow">阅读全文 →</span>
-        </a>
-        <a class="post-list-item" href="posts/2026-08-31-hello-world.html">
-          <time class="post-item-date" datetime="2026-08-31">2026-08-31</time>
-          <h2>你好,世界 👋</h2>
-          <p class="post-item-excerpt">为什么要在 2026 年还自己动手写博客,以及这个博客未来会写些什么。</p>
-          <span class="link-arrow">阅读全文 →</span>
-        </a>
-        <a class="post-list-item" href="posts/2026-08-28-how-i-built-this-site.html">
-          <time class="post-item-date" datetime="2026-08-28">2026-08-28</time>
-          <h2>这个网站是怎么搭建的 🛠️</h2>
-          <p class="post-item-excerpt">不用任何框架,三个文件 + GitHub Pages,就把个人网站跑了起来。完整过程与踩过的坑都在这里。</p>
-          <span class="link-arrow">阅读全文 →</span>
-        </a>
-      </div>
+    <div class="container" style="padding: 90px 0; text-align: center">
+      <h1>博客换地方了 ✍️</h1>
+      <p class="p-meta">文章列表现在就在首页 —— <a href="index.html">前往首页 →</a></p>
     </div>
   </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <p>© <span id="year">2026</span> HARE · 保留所有权利</p>
-      <p>用 ❤️ 搭建 · 灵感持续更新中</p>
-    </div>
-  </footer>
-
-  <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
-
-  <script src="script.js"></script>
+  <script>location.replace("index.html");</script>
 </body>
 </html>
