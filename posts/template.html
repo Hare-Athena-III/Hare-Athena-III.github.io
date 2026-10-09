@@ -4,7 +4,7 @@
   <!-- ✍️ 写新文章的步骤:
        1. 复制本文件,重命名为:日期-英文短标题.html(如 2026-09-15-my-post.html)
        2. 搜索「①②③」依次修改:标题 / 日期 / 正文
-       3. 在 blog.html 的文章列表里加上这篇文章的链接
+       3. 在 index.html 的文章列表里加上这篇文章的链接
        4. git add . && git commit -m "新文章" && git push
   -->
   <meta charset="UTF-8" />
@@ -17,13 +17,10 @@
 <body>
   <header class="site-header scrolled">
     <nav class="nav container" aria-label="主导航">
-      <a class="brand" href="../index.html"><span class="brand-dot"></span>HARE<span class="brand-sub">.dev</span></a>
+      <a class="brand" href="../index.html"><span class="brand-dot"></span>HARE<span class="brand-sub">.blog</span></a>
       <ul class="nav-menu" id="navMenu">
         <li><a href="../index.html" class="nav-link">首页</a></li>
-        <li><a href="../index.html#about" class="nav-link">关于</a></li>
-        <li><a href="../index.html#projects" class="nav-link">项目</a></li>
-        <li><a href="../index.html#contact" class="nav-link">联系</a></li>
-        <li><a href="../blog.html" class="nav-link nav-blog">✍️ 博客</a></li>
+        <li><a href="../index.html" class="nav-link nav-blog">✍️ 文章</a></li>
       </ul>
       <div class="nav-actions">
         <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色模式">🌙</button>
@@ -64,7 +61,7 @@ console.log("Hello, blog!");</code></pre>
       </div>
 
       <nav class="post-nav" aria-label="文章导航">
-        <a href="../blog.html">📝 博客列表</a>
+        <a href="../index.html">📝 文章列表</a>
       </nav>
     </article>
   </main>
