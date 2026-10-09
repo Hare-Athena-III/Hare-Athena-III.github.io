@@ -211,7 +211,7 @@ html[data-theme="dark"] .eyebrow { color: #9ca0ff; }
   border-top: 1px solid var(--border);
   padding: 30px 0; color: var(--muted); font-size: 14.5px;
 }
-.footer-inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 
 /* ---------- 回到顶部 ---------- */
 .back-top {
@@ -225,6 +225,17 @@ html[data-theme="dark"] .eyebrow { color: #9ca0ff; }
 }
 .back-top.show { opacity: 1; visibility: visible; transform: none; }
 .back-top:hover { transform: translateY(-4px); }
+
+/* ---------- 页脚链接 ---------- */
+.footer-links a {
+  display: grid; place-items: center;
+  width: 34px; height: 34px; border-radius: 10px;
+  color: var(--text-2); background: var(--surface-2);
+  border: 1px solid var(--border);
+  transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.footer-links a:hover { transform: translateY(-3px); color: var(--primary); border-color: var(--primary); }
+.footer-links svg { width: 19px; height: 19px; fill: currentColor; }
 
 /* ---------- 响应式 ---------- */
 @media (max-width: 720px) {
