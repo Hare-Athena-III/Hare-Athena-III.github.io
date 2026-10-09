@@ -1,4 +1,4 @@
-# 李华的个人网站 · 博客
+# HARE 的个人网站 · 博客
 
 纯静态个人网站 + 博客,无需任何构建工具,托管在 GitHub Pages 上。
 
@@ -41,6 +41,6 @@ git push
 
 ## 自定义
 
-- **名字 / 头像 / 社交链接**:搜索各文件中的「李华」和 `hello@example.com` 替换;
+- **名字 / 头像 / 社交链接**:搜索各文件中的「HARE」和 `hello@example.com`,替换成你自己的;
 - **主题色**:改 `style.css` 顶部的 `--primary`、`--primary-2` 等变量;
 - **新增板块**:参考 `index.html` 中现有 section 的结构复制一份。
