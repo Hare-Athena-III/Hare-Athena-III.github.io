@@ -80,8 +80,8 @@
         </figure>
         <p>注意对话框里那两个字段:</p>
         <ul>
-          <li><strong>名称</strong>:<code>C:\Users\18329\OneDrive\Desktop\Alas.lnk</code></li>
-          <li><strong>发送方</strong>:<code>C:\Users\18329\OneDrive\Desktop\Alas.lnk</code></li>
+          <li><strong>名称</strong>:<code>C:\Users\&lt;你的用户名&gt;\OneDrive\Desktop\Alas.lnk</code></li>
+          <li><strong>发送方</strong>:<code>C:\Users\&lt;你的用户名&gt;\OneDrive\Desktop\Alas.lnk</code></li>
         </ul>
         <p>
           「发送方」是本地路径,和「名称」一字不差 —— 这是第一个线索:
@@ -97,7 +97,7 @@
           查起来很快:
         </p>
         <pre><code># 看一个文件身上挂了哪些数据流
-Get-Item "C:\Users\18329\OneDrive\Desktop\RevoUninstaller Pro.lnk" -Stream *
+Get-Item "C:\Users\&lt;你的用户名&gt;\OneDrive\Desktop\RevoUninstaller Pro.lnk" -Stream *
 
 # 递归数一遍:桌面(以及全盘)有多少个 .lnk 带着 Zone.Identifier
 Get-ChildItem C:\ -Recurse -Filter *.lnk -ErrorAction SilentlyContinue |
@@ -125,9 +125,9 @@ Get-ChildItem C:\ -Recurse -Filter *.lnk -ErrorAction SilentlyContinue |
           于是弹出……跟 MOTW <strong>一模一样</strong>的那个警告框。
         </p>
         <p>用 <code>icacls</code> 看一眼就明白了:</p>
-        <pre><code>icacls "C:\Users\18329\OneDrive\Desktop"
+        <pre><code>icacls "C:\Users\&lt;你的用户名&gt;\OneDrive\Desktop"
 
-# C:\Users\18329\OneDrive\Desktop
+# C:\Users\&lt;你的用户名&gt;\OneDrive\Desktop
 #     ...(若干普通权限条目)...
 #     Mandatory Label\Low Mandatory Level:(OI)(CI)(NW)     &lt;-- 就是它</code></pre>
         <p>
@@ -171,11 +171,11 @@ Get-ChildItem C:\ -Recurse -Filter *.lnk -ErrorAction SilentlyContinue |
 
         <h2>五、修复:一行 icacls</h2>
         <p>把标签改回 <code>Medium</code>(= 普通用户对象该有的级别),并让改动递归下去:</p>
-        <pre><code>icacls "C:\Users\18329\OneDrive\Desktop" /setintegritylevel (OI)(CI)M /T
+        <pre><code>icacls "C:\Users\&lt;你的用户名&gt;\OneDrive\Desktop" /setintegritylevel (OI)(CI)M /T
 
 # Successfully processed 53073 files; Failed processing 0 files</code></pre>
         <p>顺手把另一个中招的工作区目录也修了(<code>IdeaProjects</code>,340 个对象),然后复查:</p>
-        <pre><code>icacls "C:\Users\18329\OneDrive\Desktop"
+        <pre><code>icacls "C:\Users\&lt;你的用户名&gt;\OneDrive\Desktop"
 
 # Mandatory Label\Medium Mandatory Level:(OI)(CI)(NW)   &lt;-- 修好了</code></pre>
         <p>双击快捷方式,警告框不再出现。四个坑记一下:</p>
