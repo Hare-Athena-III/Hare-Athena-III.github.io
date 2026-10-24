@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>贴吧一键签到:两套签名、两个接口,和一个被我弄丢的任务 · HARE 的博客</title>
+  <meta name="description" content="用 Python 加一个 Windows 计划任务做贴吧自动签到。移动端和 Web 两个接口、两套签名算法,用错误码定标证明 Web 根本不校签名;以及一次把定时任务彻底弄丢的事故复盘。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌟</text></svg>" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    /* ---------- 本页专用:表格 / 提示框 ---------- */
+    .article table {
+      width: 100%; border-collapse: collapse; margin: 0 0 22px;
+      font-size: 15px; display: block; overflow-x: auto;
+    }
+    .article th, .article td {
+      border: 1px solid var(--border); padding: 8px 12px;
+      text-align: left; color: var(--text-2); vertical-align: top;
+    }
+    .article th { background: var(--surface-2); color: var(--text); white-space: nowrap; }
+    .note {
+      background: var(--surface-2); border-left: 3px solid var(--primary);
+      border-radius: 0 12px 12px 0; padding: 14px 18px; margin: 0 0 22px;
+    }
+    .note p { margin-bottom: 10px; }
+    .note > :last-child { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header scrolled">
+    <nav class="nav container" aria-label="主导航">
+      <a class="brand" href="../index.html"><span class="brand-dot"></span>HARE<span class="brand-sub">.blog</span></a>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="../index.html" class="nav-link">首页</a></li>
+        <li><a href="../index.html" class="nav-link nav-blog">✍️ 文章</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换深色 / 浅色模式">🌙</button>
+        <button class="nav-toggle" id="navToggle" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <article class="container">
+      <header class="page-head">
+        <p class="eyebrow"><time datetime="2026-10-24">2026 年 10 月 24 日</time></p>
+        <h1>贴吧一键签到:两套签名、两个接口,和一个被我弄丢的任务 ⏰</h1>
+        <p class="p-meta">📖 约 10 分钟 · #Python #逆向 #Windows #自动化</p>
+      </header>
+
+      <div class="article">
+
+        <p class="lead">
+          想要的东西很简单:每天早上,自动把关注的贴吧签到一遍,不用掏出手机点二十次。
+          真正花时间的不是签到本身,而是它背后那两个接口——一个校验签名、一个不校验,
+          错误码却长得几乎一样。中途我还在没权限的窗口里跑了一次安装脚本,
+          把已经装好的计划任务<strong>删了个干净</strong>。
+        </p>
+
+        <h2>一、需求十分钟,边角两小时</h2>
+        <p>
+          需求能一句话说完:<strong>用 cookie 登录,取出关注列表,逐个签到,失败重试,能无人值守。</strong>
+          我一开始以为就是这样一个 Python 文件的事,最后它长成了两千多行、13 个文件:
+          主脚本、自测、四个 PowerShell 脚本、一个批处理引导,还有 README。
+        </p>
+        <p>多出来的东西几乎全在边角上:</p>
+        <ul>
+          <li>网络有时候连不上,得自己换一条路;</li>
+          <li>接口有两套,签名算法也有两套,还不能混用;</li>
+          <li>Windows 控制台的编码会把中文日志搅成乱码;</li>
+          <li>计划任务的「开机触发」有一种<strong>静默失效</strong>的姿势。</li>
+        </ul>
+        <div class="note">
+          <p>代码是开源的,贴在 GitHub 上:<a href="https://github.com/Hare-Athena-III/tieba-signin">Hare-Athena-III/tieba-signin</a>。下面只讲思路和踩过的坑,不逐行讲实现。</p>
+        </div>
+
+        <h2>二、翻车一:<code>requests</code> 连不上,<code>urllib</code> 却行</h2>
+        <p>
+          第一版写完,一次都没成功过。报的错很单调:
+        </p>
+        <pre><code>ReadTimeout: HTTPSConnectionPool(host='tieba.baidu.com', port=443):
+Read timed out. (read timeout=8.0)</code></pre>
+        <p>
+          稳定超时,重试也没用。但同一台机器、同一个时刻,拿标准库发一个请求,却是正常的 HTTP 200:
+        </p>
+        <pre><code>import urllib.request, requests
+
+# 标准库:200
+urllib.request.urlopen("https://tieba.baidu.com/f?kw=test", timeout=8).status
+
+# requests:稳定 ReadTimeout
+requests.get("https://tieba.baidu.com/f?kw=test", timeout=8)</code></pre>
+        <p>
+          这就排除了「贴吧挂了」「网络不通」「cookie 错了」——问题出在<strong>请求库这一层</strong>。
+          这台机器上代理软件在 7897 端口开着,但注意:脚本默认是<strong>直连</strong>的,
+          直连也通。所以不是代理配置的问题,而是 <code>requests</code> 在这台机器上
+          <code>tieba.baidu.com</code> 走不通(TLS 握手或 HTTP 实现上的差异)。
+        </p>
+        <p>我没有继续往底层挖,而是把它当成一个<strong>环境差异</strong>来处理:</p>
+        <ul>
+          <li>先试 <code>requests</code>:API 顺手、异常清晰、超时可控;</li>
+          <li>失败(超时 / 连接错误)就自动切到标准库 <code>urllib</code>,用同一套请求构造和解析逻辑;</li>
+          <li><code>--transport requests|urllib|auto</code> 可以手动指定,想看看到底走哪条路就写日志。</li>
+        </ul>
+        <p>
+          这不是最优雅的解法,但是个诚实的解法:<strong>能用哪条路就用哪条路,并且让日志说清楚用了哪条。</strong>
+          后来跑真实签到,日志里那行 <code>HTTP 后端:自动选中 urllib</code> 就是它自己选的。
+        </p>
+
+        <h2>三、两个接口,两套签名</h2>
+        <p>贴吧有两套签到入口,行为差别很大:</p>
+        <ul>
+          <li>
+            <strong>移动端</strong>:<code>c.tieba.baidu.com/c/c/forum/sign</code>,
+            返回里有本吧排名,但要传签名;
+          </li>
+          <li>
+            <strong>Web</strong>:<code>/sign/add</code>,参数简单,不传签名也能用。
+          </li>
+        </ul>
+        <p>两种签名算法:</p>
+        <pre><code># 移动端:单层 md5,值不做 URL 编码
+def sign_mobile(kw, tbs):
+    return md5(f"kw={kw}tbs={tbs}tiebaclient!!!".encode()).hexdigest()
+
+# Web:两层 md5,里层对「排好序的 k=v」做摘要,值是 encodeURIComponent 过的
+def sign_web(params):
+    body = "&".join(
+        f"{k}={quote(str(v), safe='')}"   # 关键:safe=''
+        for k, v in sorted(params.items())
+    )
+    inner = md5(body.encode()).hexdigest()
+    return md5((inner + "tiebaclient!!!").encode()).hexdigest()</code></pre>
+        <p>
+          最容易错的是那个 <code>safe=''</code>。Python 的 <code>quote</code> 默认是
+          <code>safe='/'</code>,也就是<strong>不会编码斜杠</strong>;而签名对应的是 JS 的
+          <code>encodeURIComponent</code>,它<strong>会</strong>编码斜杠。
+          参数里只要出现一个 <code>/</code>,签名就悄悄错了 —— 不报错,只是服务端说「签名不对」。
+        </p>
+        <p>
+          为了确认 <code>quote(safe='')</code> 真的和 JS 一致,我拿 Node 的 <code>crypto</code>
+          逐位对拍过一遍,不是靠感觉。
+        </p>
+
+        <h2>四、用错误码当尺子:Web 到底校不校验签名</h2>
+        <p>
+          有个流传很广的说法:Web 签到接口<strong>不校验签名</strong>。想验证这件事,
+          按理说得有真实账号,但可以用一个更干净的办法——
+          <strong>拿一个格式合法、但肯定无效的 BDUSS 去打接口,看错误码。</strong>
+        </p>
+        <p>逻辑是这样:如果签名这一关过了,服务端会往下走到「查登录态」,于是返回 A 类错误;签名被拒,则返回 B 类错误。两者的错误码不会一样。</p>
+        <table>
+          <thead>
+            <tr><th>签名</th><th>Web <code>/sign/add</code></th><th>移动端 <code>forum/sign</code></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>算对</td><td><code>no=1990055</code></td><td><code>error_code=1</code></td></tr>
+            <tr><td>算错 / 不传</td><td><code>no=1990055</code>(一模一样)</td><td><code>error_code=110001</code></td></tr>
+          </tbody>
+        </table>
+        <p>
+          结论很清楚:<strong>Web 接口根本不看签名</strong>——算对算错,返回的都是同一个码;
+          而<strong>移动端会校验签名</strong>(<code>110001</code> 只在签名错时出现),
+          并且 <code>tbs</code> 确实参与签名。
+        </p>
+        <div class="note">
+          <p>
+            那两个「算对」的返回值需要解释一下:<code>1990055</code> 是「账号未实名,不能签到」,
+            <code>error_code=1</code> 是「签名过了,但登录态无效」。它们都不是成功码,
+            但恰好证明了<strong>请求已经走到业务层</strong>,而不是被签名关卡拦住。
+          </p>
+        </div>
+        <p>
+          这个方法的好处是:<strong>不需要真实账号,也能给接口行为定性。</strong>
+          整条签到策略就是据此定的——默认走移动端拿排名,签名被拒时自动退回 Web,
+          而不是把 <code>110001</code> 误当成「登录失效」直接罢手。
+        </p>
+        <p>顺便把返回码分了个类:</p>
+        <ul>
+          <li><code>0</code>:签到成功;</li>
+          <li><code>1101</code> / <code>160002</code>:今天已经签过,也算成功(脚本是幂等的);</li>
+          <li><code>1103</code> / <code>1104</code>:太快了,等 4~6 秒重试一次;</li>
+          <li><code>1</code> / <code>2</code> / <code>4</code> / <code>5</code> / <code>7</code> / <code>10</code> / <code>340006</code>:登录失效,<strong>立刻中止</strong>,不空跑;</li>
+          <li><code>1990055</code>:账号未实名——别折腾 cookie 了,去实名。</li>
+        </ul>
+
+        <h2>五、编码:三分之二的坑都在这里</h2>
+        <p>
+          中文日志进了文件是乱码。原因不复杂,但涉及三方,任何一方不一致就坏:
+        </p>
+        <ul>
+          <li>Windows 控制台默认是 <strong>GBK</strong>(代码页 936);</li>
+          <li>Python 输出要显式 <code>-X utf8</code>;</li>
+          <li>PowerShell 这边要同时设 <code>$OutputEncoding</code> 和 <code>[Console]::OutputEncoding</code>。</li>
+        </ul>
+        <pre><code>$utf8 = New-Object System.Text.UTF8Encoding($false)
+$OutputEncoding = $utf8
+[Console]::OutputEncoding = $utf8</code></pre>
+        <p>
+          还有一个更阴的:PowerShell 5.1 读 <code>.ps1</code> 文件时按
+          <strong>系统 ANSI 代码页</strong>解码,不带 BOM 的 UTF-8 中文会被读成乱码。
+          我的 <code>status-task.ps1</code> 就因此报过这种错:
+        </p>
+        <pre><code>表达式或语句中包含意外的标记“code，”。
+所在位置 ...\status-task.ps1:37 字符: 1</code></pre>
+        <p>
+          它把紧贴在参数名后面的中文逗号当成了变量名的一部分 ——
+          <code>$code,</code> 于是被解析成 <code>${code，}</code>。
+          而失败方式更气人:脚本<strong>静默以退出码 0 结束,什么都不输出</strong>,
+          看起来像「跑完了、没东西可显示」。修法只有一个 ——
+          <strong>所有 <code>.ps1</code> 存成 UTF-8 带 BOM</strong>,并且写了个小脚本专门检查这件事。
+        </p>
+
+        <h2>六、无人值守:开机触发为什么会静默失效</h2>
+        <p>
+          定时到点跑已经验证没问题了,但「开机自动签到」怎么都不动。
+          症状非常有迷惑性:任务列得出来、状态 Ready、触发器显示已启用,
+          结果开机之后<strong>「上次运行时间」一点都没变</strong>——它压根没启动过。
+        </p>
+        <p>
+          原因在<strong>运行身份</strong>。用当前用户(<code>LogonType=Interactive</code>)注册时,
+          Task Scheduler 只在该用户<strong>已经登录</strong>的情况下才肯启动任务。
+          而开机那一刻还没有任何用户登录,于是这次触发被直接跳过,连失败记录都不留。
+        </p>
+        <p>改成不需要用户会话的身份就好了:</p>
+        <pre><code>New-ScheduledTaskPrincipal -UserId 'SYSTEM' `
+    -LogonType ServiceAccount -RunLevel Highest</code></pre>
+        <p>
+          换成 SYSTEM 之后有个连带问题:SYSTEM 的 PATH 是<strong>机器级</strong> PATH,
+          看不到用户 PATH 里的 Python。所以注册时必须把解释器<strong>解析成绝对路径</strong>再写进去,
+          否则任务跑起来第一句就是「找不到 python」。
+        </p>
+        <p>
+          另一个问题是「开机时网络还没好」。Windows 没有「网络就绪」触发器,
+          只能先触发、再自己等。等待方式也换过三次:
+        </p>
+        <table>
+          <thead>
+            <tr><th>判定方式</th><th>问题</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>看网卡状态</td><td>冷启动时早就显示「已连接」,但 DNS 还没通,一跑就超时</td></tr>
+            <tr><td>解析 DNS</td><td>Windows PowerShell 5.1 上 <code>Resolve-DnsName</code> 没有 <code>-AsJob</code>,同步调用会一直卡住</td></tr>
+            <tr><td>ping 域名</td><td>通 = DNS 和路由都正常,最理想;<strong>但有些网络封 ICMP</strong>,永远 ping 不通</td></tr>
+            <tr><td>TCP 连 443</td><td>ICMP 被封时作为兜底;两者任一通就开始签到</td></tr>
+          </tbody>
+        </table>
+        <p>
+          所以现在是 ping 为主、TCP 兜底,每 5 秒试一次,最多等 120 秒。
+          <strong>等满还没通也照常执行</strong>——签到本身是幂等的,漏一天补不回来,
+          而脚本自己有重试,总比直接跳过强。
+        </p>
+        <p>而且日志里会记下每次都判了什么,下次出问题不用猜:</p>
+        <pre><code>[wrapper] 等待网络就绪(最多 120 秒)...
+[wrapper] 网络探测: ping=True tcp443=True
+[wrapper] 网络就绪(ping tieba.baidu.com 通,等了约 0 秒),开始签到。</code></pre>
+
+        <h2>七、我做过的最蠢的一件事:把任务弄没了</h2>
+        <p>
+          改需求的时候要重新注册任务,而<strong>注册计划任务需要管理员权限</strong>。
+          我的终端没有这个权限,可我写的安装脚本是这样的顺序:
+        </p>
+        <pre><code># 旧版本,千万别这么写
+if ($existing) {
+    Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false   # 先删
+}
+Register-ScheduledTask -TaskName $TaskName -InputObject $task      # 再建</code></pre>
+        <p>
+          于是:删除<strong>成功了</strong>,注册<strong>被拒绝</strong>
+          (<code>Register-ScheduledTask : Access is denied.</code>)。
+          结果是——旧任务没了,新任务也没建上,<strong>一个都不剩</strong>。
+        </p>
+        <p>正确的写法是覆盖,而不是先删后建:</p>
+        <pre><code>Register-ScheduledTask -TaskName $TaskName -InputObject $task -Force -ErrorAction Stop</code></pre>
+        <p>
+          并且注册失败必须<strong>明确抛错、并且说明「原有任务未被改动」</strong>,
+          绝对不能静默地把旧任务留在被删状态。
+        </p>
+        <div class="note">
+          <p>教训很朴素,但我确实又犯了一遍:<strong>破坏性操作不要放在可能失败的操作前面。</strong></p>
+          <p>顺序反过来,最坏的结果只是「没改成」;顺序错了,最坏的结果是「什么都没了」。</p>
+        </div>
+        <p>
+          另外,既然注册总要管理员权限,那就别让用户去开管理员终端敲命令——
+          给一个双击就自动提权的 <code>.cmd</code> 引导脚本,点一下 UAC 的「是」就完事。
+          顺带还能在注册完立刻<strong>试跑一次</strong>,当场证明「SYSTEM 身份下也跑得通」,
+          而不是等到下次开机才发现不行。
+        </p>
+
+        <h2>八、几条留给以后的自己</h2>
+        <ol>
+          <li>
+            <strong>先分清「环境问题」和「代码问题」。</strong>
+            同一个接口,换个库就通,那不是逻辑错,是环境差异 —— 做兼容层,不要继续挖。
+          </li>
+          <li>
+            <strong>没有真实账号也能给接口定性。</strong>
+            用「格式合法但内容无效」的凭据打接口,靠错误码的<strong>差别</strong>推断它走到了哪一步。
+          </li>
+          <li>
+            <strong>幂等是无人值守的前提。</strong>
+            重复签到返回「已签过」而不是报错,才敢让它在开机、定时、手动各处随便跑。
+          </li>
+          <li>
+            <strong>「看起来没反应」要按「根本没启动」去查。</strong>
+            计划任务先看「上次运行时间」,它比任何日志都诚实。
+          </li>
+          <li>
+            <strong>凭据只放在被忽略的文件里。</strong>
+            cookie 等于账号密码,开源前用 <code>git grep --cached</code> 扫一遍暂存内容,
+            确认邮箱、本机路径、真凭据一个都没进去。
+          </li>
+        </ol>
+
+        <h2>九、尾声</h2>
+        <p>
+          这个项目最有意思的地方,是它让我意识到:<strong>很多「接口文档」是别人试出来的,而不是官方给的。</strong>
+          两套签名、两个入口、一组错误码,拼在一起才够还原真实行为。
+          而我自己写的安装脚本,也因为一个顺序问题,给使用者造成了实实在在的损失。
+        </p>
+        <p>
+          所以结尾还是那句:<strong>工具真正的价值,不在于它顺利跑完的那一次,
+          而在于它坏掉的时候,你能不能在五分钟内知道原因。</strong>
+          这也是为什么最后我把 <code>--check</code> 做成了一个正经功能:
+          它不带 cookie 也能跑,把「连通 / 登录态 / 关注列表 / 试签」摊成四步,直接告诉你卡在哪。
+        </p>
+
+        <hr />
+        <p style="text-align:center">— 完 —</p>
+      </div>
+      <nav class="post-nav" aria-label="文章导航">
+        <a href="2026-10-09-shortcut-security-warning.html">← 上一篇:桌面快捷方式弹「安全警告」</a>
+        <a href="../index.html">📝 文章列表</a>
+      </nav>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> HARE · 保留所有权利</p>
+      <p class="footer-links">
+        <a href="https://github.com/Hare-Athena-III" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+      </p>
+      <p>用 ❤️ 搭建 · 灵感持续更新中</p>
+    </div>
+  </footer>
+
+  <button class="back-top" id="backTop" aria-label="回到顶部">↑</button>
+
+  <script src="../script.js"></script>
+</body>
+</html>
